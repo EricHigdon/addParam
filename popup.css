@@ -1,0 +1,44 @@
+body {
+	width: 300px;
+	min-height: 300px;
+	color: #464545;
+}
+p {
+	cursor: pointer;
+	line-height: 12pt;
+	background: #f6f6f6;
+	margin: 2px 0px;
+	padding: 10px 10px;
+	overflow: hidden;
+	transition: all .3s ease;
+	position: relative;
+}
+p:hover {
+	background: #f0f0f0;
+	transition: all .3s ease;
+}
+span.remove {
+	position: absolute;
+	right: -35px;
+	top: 0px;
+	bottom: 0px;
+	font-size: 28pt;
+	line-height: 0pt;
+	color: #fff;
+	background: #f77;
+	padding: 15px 10px;
+	transition: all .3s ease;
+}
+span.remove:hover {
+	background: #f00;
+}
+p:hover span.remove {
+	right: 0px;
+}
+input {
+	width: 100%;
+}
+span.caption {
+	display: block;
+	font-size: 7pt;
+}
