@@ -1,29 +1,54 @@
 var parameters = JSON.parse(localStorage.getItem('parameters'));
 if (!parameters)
     parameters = []
-function addParam(value) {
+
+function addParam(value, locked) {
     if (value) {
-        var param = '<p class="parameter"><span class="value">' + value + '</span><span class="remove">-</span></p>';
+        var param = '<p class="parameter"><span class="value">';
+        param += value;
+        param += '</span><span class="settings"><span class="';
+        if (locked)
+            param += 'unlock';
+        else
+            param += 'lock';
+        param += '" title="Add this parameter to future requests"></span>';
+        param += '<span class="remove" title="Remove parameter from list">-</span></span></p>';
         $('.parameters').append(param);
     }
 }
+
 function removeParam(param) {
-    var value = param.find('.value').text(),
-        index = parameters.indexOf(value);
+    var value = param.find('.value').text();
     param.remove();
-    if (index > -1) {
-        parameters.splice(index, 1);
-        saveParams('');
+    for(var i = 0; i < parameters.length; i++) {
+        if(parameters[i].value == value) {
+            parameters.splice(i, 1);
+            break;
+        }
     }
+    saveParams('');
 }
+
 function saveParams(value) {
     if (value)
-        parameters.push(value);
+        parameters.push({'value':value, 'locked':false});
     localStorage.setItem('parameters', JSON.stringify(parameters));
 }
+
+function toggleLocked(param) {
+    var value = param.find('.value').text();
+    for(var i = 0; i < parameters.length; i++) {
+        if(parameters[i].value == value) {
+            parameters[i].locked = !parameters[i].locked;
+            break;
+        }
+    }
+    saveParams('');
+}
+
 $(document).ready(function() {
     $.each(parameters, function() {
-        addParam(this);
+        addParam(this.value, this.locked);
     });
     $('body').on('click', '.addParam', function() {
         $(this).before('<p><input type="text"/><span class="caption">Press Enter to save</span></p>');
@@ -44,14 +69,22 @@ $(document).ready(function() {
     });
     $('body').on('keydown', 'input', function(e) {
         if (e.keyCode == 13) {
-            addParam($(this).val());
+            addParam($(this).val(), false);
             saveParams($(this).val());
             $(this).parent().remove();
         }
     });
     $('body').on('click', '.remove', function(e) {
         e.stopPropagation();
-        console.log($(this).parent());
-        removeParam($(this).parent());
+        console.log($(this).parent().parent());
+        removeParam($(this).parent().parent());
+    });
+    $('body').on('click', '.lock, .unlock', function(e) {
+        e.stopPropagation();
+        if($(this).hasClass('lock'))
+            $(this).removeClass('lock').addClass('unlock');
+        else
+            $(this).removeClass('unlock').addClass('lock');
+        toggleLocked($(this).parent().parent());
     });
 });

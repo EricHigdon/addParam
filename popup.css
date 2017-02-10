@@ -17,22 +17,46 @@ p:hover {
 	background: #f0f0f0;
 	transition: all .3s ease;
 }
-span.remove {
+span.settings {
 	position: absolute;
-	right: -35px;
+	right: -100px;
 	top: 0px;
 	bottom: 0px;
-	font-size: 28pt;
 	line-height: 0pt;
 	color: #fff;
+	transition: all .3s ease;
+}
+span.remove {
+	font-size: 30pt;
 	background: #f77;
-	padding: 15px 10px;
+	padding: 0px 10px;
+	height: 100%;
+	line-height: 30px;
+	display: inline-block;
 	transition: all .3s ease;
 }
 span.remove:hover {
 	background: #f00;
 }
-p:hover span.remove {
+span.lock, span.unlock {
+	background-image: url(lock.svg);
+	height: 100%;
+	display: inline-block;
+	vertical-align: top;
+	width: 36px;
+	background-size: 50%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-color: #56688c;
+	transition: all .3s ease;
+}
+span.unlock {
+	background-image: url(unlock.svg);
+}
+span.lock:hover, span.unlock:hover {
+	background-color: #001d54;
+}
+p:hover span.settings {
 	right: 0px;
 }
 input {
