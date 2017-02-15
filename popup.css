@@ -39,7 +39,7 @@ span.remove:hover {
 	background: #f00;
 }
 span.lock, span.unlock {
-	background-image: url(lock.svg);
+	background-image: url(lock.png);
 	height: 100%;
 	display: inline-block;
 	vertical-align: top;
@@ -51,7 +51,7 @@ span.lock, span.unlock {
 	transition: all .3s ease;
 }
 span.unlock {
-	background-image: url(unlock.svg);
+	background-image: url(unlock.png);
 }
 span.lock:hover, span.unlock:hover {
 	background-color: #001d54;
