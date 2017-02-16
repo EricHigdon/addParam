@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "AddParam",
-  "description": "A Quick way to add a parameter to the current page URL.",
+  "description": "A quick way to add a parameter to the current page URL.",
   "version": "1.1.1",
   "browser_action": {
     "default_icon": "icon.png",
