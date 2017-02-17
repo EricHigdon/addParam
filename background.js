@@ -1,3 +1,10 @@
+function lockedFor(param, type) {
+    if (param.locked.length > 0 && param.locked.indexOf(type) != -1)
+        return true;
+    else
+        return false;
+}
+
 chrome.webRequest.onBeforeRequest.addListener(
     function(details) {
         var parameters = JSON.parse(localStorage.getItem('parameters')),
@@ -6,7 +13,7 @@ chrome.webRequest.onBeforeRequest.addListener(
             parameters = [];
         var url = details.url;
         for (var i = 0; i < parameters.length; i++) {
-            if (parameters[i].locked && url.indexOf(parameters[i].value) == -1) {
+            if (lockedFor(parameters[i], details.type) && url.indexOf(parameters[i].value) == -1) {
                 if (url.indexOf('?') > -1)
                     url += '&';
                 else

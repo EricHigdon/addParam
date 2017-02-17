@@ -3,7 +3,7 @@ body {
 	min-height: 300px;
 	color: #464545;
 }
-p {
+.parameter, .addParam {
 	cursor: pointer;
 	line-height: 12pt;
 	background: #f6f6f6;
@@ -13,11 +13,11 @@ p {
 	transition: all .3s ease;
 	position: relative;
 }
-p:hover {
+.parameter:hover, .addParam:hove {
 	background: #f0f0f0;
 	transition: all .3s ease;
 }
-span.settings {
+.settings {
 	position: absolute;
 	right: -100px;
 	top: 0px;
@@ -26,7 +26,7 @@ span.settings {
 	color: #fff;
 	transition: all .3s ease;
 }
-span.remove {
+.remove {
 	font-size: 30pt;
 	background: #f77;
 	padding: 0px 10px;
@@ -35,10 +35,10 @@ span.remove {
 	display: inline-block;
 	transition: all .3s ease;
 }
-span.remove:hover {
+.remove:hover {
 	background: #f00;
 }
-span.lock, span.unlock {
+.lock, .unlock {
 	background-image: url(lock.png);
 	height: 100%;
 	display: inline-block;
@@ -50,19 +50,61 @@ span.lock, span.unlock {
 	background-color: #56688c;
 	transition: all .3s ease;
 }
-span.unlock {
+.unlock {
 	background-image: url(unlock.png);
 }
-span.lock:hover, span.unlock:hover {
+.lock:hover, .unlock:hover {
 	background-color: #001d54;
 }
-p:hover span.settings {
+.parameter:hover .settings {
 	right: 0px;
 }
 input {
 	width: 100%;
 }
-span.caption {
+.caption {
 	display: block;
 	font-size: 7pt;
+}
+.types {
+	display: none;
+}
+.types.active {
+	display: block;
+	position: fixed;
+	background: #fff;
+	color: #444;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	z-index: 1;
+	margin: 15px;
+	box-shadow: 0px 0px 0px 15px rgba(0, 0, 0, .4);
+	padding: 12px;
+}
+.gear {
+	display: block;
+	width: 13px;
+	height: 13px;
+	margin: 1px 1px 0px 0px;
+	background-image: url(gear.png);
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	float: right;
+}
+.types label {
+	display: inline-block;
+	width: 50%;
+}
+.types label input {
+	width: auto;
+}
+.types .close {
+	float: right;
+	font-style: initial;
+	color: #f00;
+	font-size: 24pt;
+	line-height: 8pt;
 }
