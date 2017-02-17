@@ -1,6 +1,7 @@
 chrome.webRequest.onBeforeRequest.addListener(
     function(details) {
-        var parameters = JSON.parse(localStorage.getItem('parameters'));
+        var parameters = JSON.parse(localStorage.getItem('parameters')),
+            redirect = false;
         if (!parameters)
             parameters = [];
         var url = details.url;
@@ -11,9 +12,11 @@ chrome.webRequest.onBeforeRequest.addListener(
                 else
                     url += '?';
                 url += parameters[i].value;
+                redirect = true;
             }
         }
-        return {redirectUrl: url};
+        if (redirect)
+            return {redirectUrl: url};
     },
     {urls: ["<all_urls>"]},
     ["blocking"]
