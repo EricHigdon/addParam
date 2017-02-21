@@ -98,7 +98,7 @@ $(document).ready(function() {
     });
     $('body').on('keydown', 'input', function(e) {
         if (e.keyCode == 13) {
-            addParam($(this).val(), false);
+            addParam($(this).val(), []);
             saveParams($(this).val());
             $(this).parent().remove();
         }
