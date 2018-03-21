@@ -66,10 +66,10 @@ input {
 	display: block;
 	font-size: 7pt;
 }
-.types {
+.settingsPanel {
 	display: none;
 }
-.types.active {
+.settingsPanel.active {
 	display: block;
 	position: fixed;
 	background: #fff;
@@ -101,7 +101,7 @@ input {
 .types label input {
 	width: auto;
 }
-.types .close {
+.settingsPanel .close {
 	float: right;
 	font-style: initial;
 	color: #f00;

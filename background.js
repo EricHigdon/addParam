@@ -4,6 +4,9 @@ function lockedFor(param, type) {
     else
         return false;
 }
+function escapeRegExp(str) {
+	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+}
 
 chrome.webRequest.onBeforeRequest.addListener(
     function(details) {
@@ -14,12 +17,23 @@ chrome.webRequest.onBeforeRequest.addListener(
         var url = details.url;
         for (var i = 0; i < parameters.length; i++) {
             if (lockedFor(parameters[i], details.type) && url.indexOf(parameters[i].value) == -1) {
-                if (url.indexOf('?') > -1)
-                    url += '&';
-                else
-                    url += '?';
-                url += parameters[i].value;
-                redirect = true;
+				var match = false;
+				for (var index = 0; index < parameters[i].lockedUrls.length; index++) {
+					var lockedUrl = parameters[i].lockedUrls[index];
+					var re = new RegExp(escapeRegExp(lockedUrl), 'g');
+					if (lockedUrl == '*' || url.match(re)) {
+						match = true;
+						break
+					}
+				}
+				if (match) {
+                	if (url.indexOf('?') > -1)
+                    	url += '&';
+                	else
+                    	url += '?';
+                	url += parameters[i].value;
+                	redirect = true;
+				}
             }
         }
         if (redirect)

@@ -3,7 +3,7 @@ var parameters = JSON.parse(localStorage.getItem('parameters')),
 if (!parameters)
     parameters = []
 
-function addParam(value, locked) {
+function addParam(value, locked, lockedUrls='*') {
     if (value) {
         var param = '<div class="parameter"><span class="value">';
         param += value;
@@ -16,14 +16,15 @@ function addParam(value, locked) {
             param += 'lock';
             param += '" title="Add this parameter to future requests">';
         }
-        param += '<i class="gear"></i><div class="types"><i class="close">&times;</i><h3>Lock Parameter for Request Types</h3>';
+        param += '<i class="gear"></i><div class="settingsPanel"><i class="close">&times;</i><div class="types"><h3>Lock Parameter for Request Types</h3>';
         for (var i = 0; i < types.length; i++) {
             param += '<label><input value="' + types[i] + '" type="checkbox" ';
             if (locked.indexOf(types[i]) > -1)
                 param += 'checked="checked" ';
             param += '/> ' + types[i] + '</label>';
         }
-        param += '</div></div>';
+		param += '</div><div class="lockedUrls"><h3>Lock Parameter for Requests To</h3><input name="lockedUrls" type="text" value="'+lockedUrls+'"/>';
+        param += '</div></div></div>';
         param += '<span class="remove" title="Remove parameter from list">-</span></div></div>';
         $('.parameters').append(param);
     }
@@ -43,7 +44,7 @@ function removeParam(param) {
 
 function saveParams(value=false) {
     if (value)
-        parameters.push({'value':value, 'locked':[]});
+        parameters.push({'value':value, 'locked':[], 'lockedUrls': ['*']});
     localStorage.setItem('parameters', JSON.stringify(parameters));
 }
 
@@ -75,12 +76,25 @@ function unlock(param) {
     }
     saveParams();
 }
+
+function saveLockedUrls(param, urls) {
+    var value = param.find('.value').text();
+    for(var i = 0; i < parameters.length; i++) {
+        if(parameters[i].value == value) {
+			urls_array = urls.split(', ');
+            parameters[i].lockedUrls = urls_array;
+            break;
+        }
+    }
+    saveParams();
+}
+
 $(document).ready(function() {
     $.each(parameters, function() {
-        addParam(this.value, this.locked);
+        addParam(this.value, this.locked, this.lockedUrls);
     });
     $('body').on('click', '.addParam', function() {
-        $(this).before('<div class="parameter"><input type="text"/><span class="caption">Press Enter to save</span></div>');
+        $(this).before('<div class="parameter"><input name="newParam" type="text"/><span class="caption">Press Enter to save</span></div>');
         $('input').focus();
     });
     $('body').on('click', '.parameter', function() {
@@ -96,7 +110,7 @@ $(document).ready(function() {
             chrome.tabs.update(tab.id, {url: url});
         });
     });
-    $('body').on('keydown', 'input', function(e) {
+    $('body').on('keydown', 'input[name="newParam"]', function(e) {
         if (e.keyCode == 13) {
             addParam($(this).val(), []);
             saveParams($(this).val());
@@ -121,11 +135,11 @@ $(document).ready(function() {
     });
     $('body').on('click', '.gear', function(e) {
         e.stopPropagation();
-        var types = $(this).next();
-        if (types.hasClass('active'))
-            types.removeClass('active');
+        var settingsPanel = $(this).next();
+        if (settingsPanel.hasClass('active'))
+            settingsPanel.removeClass('active');
         else
-            types.addClass('active');
+            settingsPanel.addClass('active');
     });
     $('body').on('change', '.types input', function() {
         var types = [],
@@ -133,19 +147,23 @@ $(document).ready(function() {
         typeDiv.find('input:checked').each(function() {
             types.push($(this).val());
         });
-        lockFor(typeDiv.parent().parent().parent(), types);
+        lockFor(typeDiv.parent().parent().parent().parent(), types);
         if (types.length <=0) {
-            typeDiv.parent().removeClass('unlock').addClass('lock');
+            typeDiv.parent().parent().removeClass('unlock').addClass('lock');
         }
         else {
-            typeDiv.parent().removeClass('lock').addClass('unlock');
+            typeDiv.parent().parent().removeClass('lock').addClass('unlock');
         }
     });
-    $('body').on('click', '.types', function(e) {
+    $('body').on('click', '.settingsPanel', function(e) {
         e.stopPropagation();
     });
-    $('body').on('click', '.types .close', function(e) {
+    $('body').on('click', '.settingsPanel .close', function(e) {
         e.stopPropagation();
-        $('.types.active').removeClass('active');
+        $('.settingsPanel.active').removeClass('active');
     });
+	$('body').on('change', 'input[name="lockedUrls"]', function(e) {
+		console.log($(this).val());
+		saveLockedUrls($(this).closest('.parameter'), $(this).val());
+	});
 });
